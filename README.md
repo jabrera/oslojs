@@ -1,2 +1,2 @@
-# moonjs
+# oslojs
 Javascript MVC framework
