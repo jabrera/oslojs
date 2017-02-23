@@ -39,6 +39,7 @@ App["View"] = {
 				}
 				$(".template").attr("moon-controller", App.Utility.getControllerCode(App.CONTROLLER))
 							  .attr("moon-action", App.ACTION);
+				App.refresh();
 			},
 			"error": function(e) {
 				App.location("error", "page-not-found", [App.Utility.getControllerCode(App.CONTROLLER), App.ACTION])
