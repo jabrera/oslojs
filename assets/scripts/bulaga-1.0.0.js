@@ -1,3 +1,10 @@
+/* BulagaJS - v1.0.0 - 2017-02-23
+ * https://github.com/juvarabrera/bulagajs
+ *
+ * Copyright (c) 2017 Juvar Abrera;
+ * Licensed under the MIT license 
+*/
+ 
 "use strict";
 
 $.fn.bulaga = function(options) {
