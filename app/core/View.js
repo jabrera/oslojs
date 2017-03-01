@@ -7,6 +7,14 @@ App["View"] = {
 		this["TEMPLATE"] = template;
 		return this;
 	},
+	"data": {},
+	"set": function(name, val) {
+		this.data[name] = val;
+	},
+	"setJson": function(json) {
+		for(var i in json)
+			this.data[i] = json[i];
+	},
 	"render": function() {
 		var template = this.TEMPLATE;
 		if(template == false) {
@@ -29,6 +37,9 @@ App["View"] = {
 			"cache": true,
 			"url": "app/views/"+App.Utility.getControllerCode(App.CONTROLLER)+"/"+App.ACTION+".html",
 			"success": function(html2) {
+				for(var i in App.View.data) {
+					html2 = html2.replace(new RegExp("{{"+i+"}}", "g"), App.View.data[i]);
+				}
 				if(html == false) {
 					$(".template").html(html2);
 				} else {

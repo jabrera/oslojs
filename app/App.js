@@ -1,4 +1,4 @@
-/* MoonJS - v1.0.0 - 2017-02-23
+/* OsloJS - v1.0.1 - 2017-03-01
  * https://github.com/juvarabrera/moonjs
  *
  * Copyright (c) 2017 Juvar Abrera;
