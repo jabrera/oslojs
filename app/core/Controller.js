@@ -1,5 +1,0 @@
-App["Controller"] = {
-	"construct": function() {
-		
-	}
-}
