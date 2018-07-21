@@ -1,12 +1,12 @@
 App["KeyboardListener"] = {
 	"keys": {},
-	"ready": function() {
-		function key(code) {
+	"ready": () => {
+		let  key = code => {
 			if(App.KeyboardListener.keys.hasOwnProperty(code))
 				return true;
 			return false;
 		}
-		$(document).keydown(function(e) {
+		window.onkeydown = e => {
 			App.KeyboardListener.keys[e.which] = true;
 
 			var shift = key(16),
@@ -16,6 +16,6 @@ App["KeyboardListener"] = {
 			// if(shift && key(40)) {
 
 			// }
-		})
+		}
 	}
 }

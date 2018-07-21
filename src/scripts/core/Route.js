@@ -1,7 +1,7 @@
 App["Route"] = {
-	"call": function(dir) {
+	"call": dir => {
 		var directory = App.Utility.getCAP(dir);
-		App.CONTROLLER = directory[0].charAt(0).toUpperCase() + directory[0].slice(1) + "Controller";
+		App.CONTROLLER = `${directory[0].charAt(0).toUpperCase()}${directory[0].slice(1)}Controller`;
 		App.ACTION = directory[1];
 		var parameters = directory[2];
 		App.Controller.construct(parameters);

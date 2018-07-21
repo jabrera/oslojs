@@ -1,12 +1,12 @@
 App.Controller["HomeController"] = {
-	"construct": function(parameters) {
+	"construct": parameters => {
 
 	},
-	"index": function(parameters) {
+	"index": parameters => {
 		
 		return App.View.render();
 	},
-	"page2": function(parameters) {
+	"page2": parameters => {
 		return "/";
 	}
 }

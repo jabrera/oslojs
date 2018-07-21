@@ -14,7 +14,7 @@
 	Size: {},
 	Utility: {},
 	View: {},
-	"ready": function(page) {
-		this.Route.call(page);
+	"ready": (page) => {
+		App.Route.call(page);
 	}
 }

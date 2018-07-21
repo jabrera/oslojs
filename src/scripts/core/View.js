@@ -1,79 +1,71 @@
 App["View"] = {
-	"construct": function(parameters) {
-		this.setTemplate(App.Constant.DEFAULT_TEMPLATE);
-		$(".template").html("");
+	"construct": parameters => {
+		App.View.setTemplate(App.Constant.DEFAULT_TEMPLATE);
+		document.querySelector(".template").innerHTML = "";
 	},
-	"setTemplate": function(template) {
-		this["TEMPLATE"] = template;
-		return this;
+	"setTemplate": template => {
+		App.View["TEMPLATE"] = template;
+		return App.View;
 	},
 	"data": {},
-	"set": function(name, val) {
-		this.data[name] = val;
+	"set": (name, val) => {
+		App.View.data[name] = val;
 	},
-	"setJson": function(json) {
+	"setJson": json => {
 		for(var i in json)
-			this.data[i] = json[i];
+			App.View.data[i] = json[i];
 	},
-	"render": function() {
-		var template = this.TEMPLATE;
+	"render": () => {
+		var template = App.View.TEMPLATE;
 		if(template == false) {
-			this.loadPage(false);
+			App.View.loadPage(false);
 		} else {
-			$.ajax({
-				"url": "src/views/"+template+".html",
-				"cache": true,
-				"success": function(html) {
-					App.View.loadPage(html);
-				},
-				"error": function(e) {
-					App.location("error", "template-not-found", [template, App.Utility.getControllerCode(App.CONTROLLER), App.ACTION])
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = e => {
+				if(e.target.readyState == 4) {
+					if(e.target.status == 200) {
+						App.View.loadPage(e.target.responseText)
+					} else {
+						App.location("error", "template-not-found", [template, App.Utility.getControllerCode(App.CONTROLLER), App.ACTION])
+					}
 				}
-			});
+			};
+			xhttp.open("GET", `src/views/${template}.html`);
+			xhttp.send();
 		}
 		return true;
 	},
-	loadPage: function(html) {
-		$.ajax({
-			"cache": true,
-			"url": "src/views/"+App.Utility.getControllerCode(App.CONTROLLER)+"/"+App.ACTION+".html",
-			"success": function(html2) {
-				for(var i in App.View.data) {
-					html2 = html2.replace(new RegExp("{{"+i+"}}", "g"), App.View.data[i]);
-				}
-				if(html == false) {
-					$(".template").html(html2);
+	loadPage: html => {
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = e => {
+			if(e.target.readyState == 4) {
+				if(e.target.status == 200) {
+					let html2 = e.target.responseText;
+					for(var i in App.View.data) {
+						html2 = html2.replace(new RegExp("{{"+i+"}}", "g"), App.View.data[i]);
+					}
+					if(html == false) {
+						document.querySelector(".template").innerHTML = html2;
+					} else {
+						document.querySelector(".template").innerHTML = html;
+						var tempDiv = document.createElement('div');
+						tempDiv.innerHTML = html2;
+						for(let i = 0; i < tempDiv.childNodes.length; i++) {
+							document.querySelector(".template").innerHTML = document.querySelector(".template").innerHTML.replace(new RegExp("{{"+tempDiv.childNodes[i].id+"}}", "g"), tempDiv.childNodes[i].innerHTML);
+						}
+					}
+					document.querySelector(".template").setAttribute("moon-controller", App.Utility.getControllerCode(App.CONTROLLER));
+					document.querySelector(".template").setAttribute("moon-action", App.ACTION);
+					App.View.destruct();
 				} else {
-					$(".template").html(html);
-					$("<div></div>").html(html2).children().each(function() {
-						$(".template").html($(".template").html().replace(new RegExp("{{"+$(this).attr("id")+"}}", "g"), $(this).html()));
-					});
+					App.location("error", "page-not-found", [App.Utility.getControllerCode(App.CONTROLLER), App.ACTION])
 				}
-				$(".template").attr("moon-controller", App.Utility.getControllerCode(App.CONTROLLER))
-							  .attr("moon-action", App.ACTION);
-				App.View.destruct();
-			},
-			"error": function(e) {
-				App.location("error", "page-not-found", [App.Utility.getControllerCode(App.CONTROLLER), App.ACTION])
 			}
-		});
+		};
+		xhttp.open("GET", `src/views/${App.Utility.getControllerCode(App.CONTROLLER)}/${App.ACTION}.html`);
+		xhttp.send();
 	},
-	"destruct": function() {
-		$("[data-bulaga]").each(function() {
-			var val = $(this).attr("data-bulaga").split(" ");
-			var options = {};
-			var map = {
-				"slide-up": ["animation", "SLIDE_UP"],
-				"slide-left": ["animation", "SLIDE_LEFT"],
-				"slide-right": ["animation", "SLIDE_RIGHT"],
-				"slide-down": ["animation", "SLIDE_DOWN"],
-				"bounce": ["bounce", true],
-				"repeat": ["repeat", true]
-			}
-			for(var x in val) {
-				if(map.hasOwnProperty(val[x]))
-					options[map[val[x]][0]] = map[val[x]][1];
-			}
-		});
+	"destruct": () => {
+
 	}
 }
